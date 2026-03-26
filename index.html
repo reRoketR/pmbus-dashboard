@@ -746,16 +746,16 @@
       </div>
       <div class="conn-row">
         <label>Host</label>
-        <input id="inp-host" value="127.0.0.1" placeholder="broker host" />
+        <input id="inp-host" value="broker.hivemq.com" placeholder="broker host" />
         <label>WS Port</label>
-        <input id="inp-port" class="narrow" value="8884" placeholder="9001" />
+        <input id="inp-port" class="narrow" value="8884" placeholder="8884" />
         <label>GW&nbsp;ID</label>
-        <input id="inp-gw" class="xnarrow" value="gw01" placeholder="gw01" />
+        <input id="inp-gw" class="xnarrow" value="thesis_gw01" placeholder="thesis_gw01" />
         <label>WS&nbsp;Path</label>
         <input id="inp-path" class="xnarrow" value="/mqtt" placeholder="/mqtt" style="width:60px;" />
         <label>History&nbsp;(s)</label>
         <input id="inp-history" class="xnarrow" value="120" placeholder="120" />
-        <label class="tls-toggle" id="tls-label"><input type="checkbox" id="inp-tls" />TLS</label>
+        <label class="tls-toggle" id="tls-label"><input type="checkbox" id="inp-tls" checked> TLS</label>
         <button class="btn" id="btn-connect">Connect</button>
         <button class="btn" id="btn-disconnect" disabled>Disconnect</button>
         <span class="badge disconnected" id="badge">
