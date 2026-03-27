@@ -916,9 +916,11 @@
               <div class="threshold-row"><label>IOUT (A)</label> <input id="th-iout-min" placeholder="0"> — <input id="th-iout-max" placeholder="10"></div>
               <div class="threshold-row"><label>TEMP (°C)</label> <input id="th-temp-min" placeholder="0"> — <input id="th-temp-max" placeholder="60"></div>
               <hr style="border:0;border-top:1px solid var(--border);margin:8px 0;">
-              <div class="threshold-row"><label style="color:var(--accent);">TG Bot</label> <input id="th-tg-bot" style="width:145px;" placeholder="1234:ABCdef..."></div>
-              <div class="threshold-row"><label style="color:var(--accent);">Chat ID</label> <input id="th-tg-chat" style="width:145px;" placeholder="-100123456"></div>
-              <button class="btn" style="margin-top:6px;font-size:11px;padding:3px 10px;" onclick="saveThresholds()">Save</button>
+              <div class="threshold-row"><label style="color:var(--accent);" title="TG Bot Token">TG Token</label> <input id="th-tg-bot" style="width:145px;" placeholder="1234:ABCdef..."></div>
+              <div class="threshold-row"><label style="color:var(--accent);">Chat ID</label> <input id="th-tg-chat" style="width:80px;" placeholder="Auto" readonly>
+              <button class="btn" id="btn-tg-link" style="font-size:10px;padding:2px 6px;margin-left:auto;background:var(--accent);color:#fff;border:none;" onclick="linkTelegram()">Link</button></div>
+              <div id="tg-pin-hint" style="display:none;font-size:10px;color:var(--orange);margin-bottom:6px;line-height:1.2;"></div>
+              <button class="btn" style="margin-top:6px;font-size:11px;padding:3px 10px;" onclick="saveThresholds()">Save Config</button>
             </div>
           </div>
         </div>
@@ -1813,6 +1815,46 @@
 
     function toggleThresholdCfg() {
       document.getElementById('threshold-cfg').classList.toggle('open');
+    }
+
+    async function linkTelegram() {
+      const bot = document.getElementById('th-tg-bot').value.trim();
+      if (!bot) { alert("Enter your TG Bot Token first!"); return; }
+      const pin = Math.floor(1000 + Math.random() * 9000).toString();
+      const hint = document.getElementById('tg-pin-hint');
+      hint.innerHTML = `Send <b>${pin}</b> to your bot now.<br>Waiting for message...`;
+      hint.style.color = 'var(--orange)';
+      hint.style.display = 'block';
+      const btn = document.getElementById('btn-tg-link');
+      btn.disabled = true;
+      btn.textContent = 'Wait...';
+      const url = `https://api.telegram.org/bot${bot}/getUpdates?offset=-10`;
+      let found = false;
+      for (let i = 0; i < 15; i++) { // Poll for up to 45 seconds
+        await new Promise(r => setTimeout(r, 3000));
+        try {
+          const res = await fetch(url).then(r => r.json());
+          if (res.ok && res.result) {
+            for (let j = res.result.length - 1; j >= 0; j--) {
+              const msg = res.result[j].message;
+              if (msg && msg.text && msg.text.trim() === pin) {
+                document.getElementById('th-tg-chat').value = msg.chat.id;
+                hint.style.color = 'var(--green)';
+                hint.innerHTML = `Linked! ID: ${msg.chat.id}`;
+                found = true;
+                break;
+              }
+            }
+          }
+        } catch (e) { console.error("TG API err:", e); }
+        if (found) break;
+      }
+      if (!found) {
+        hint.style.color = 'var(--red)';
+        hint.innerHTML = `Timeout. Try again.`;
+      }
+      btn.disabled = false;
+      btn.textContent = 'Link';
     }
 
     function checkAlarm(param, value) {
