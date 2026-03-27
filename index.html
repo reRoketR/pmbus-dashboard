@@ -1843,7 +1843,7 @@
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chat, text: text, parse_mode: 'MarkdownV2' })
+        body: JSON.stringify({ chat_id: chat, text: text, parse_mode: 'Markdown' })
       }).catch(e => console.error("Telegram API error:", e));
     }
 
