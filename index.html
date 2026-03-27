@@ -980,6 +980,7 @@
   </div><!-- .app -->
 
   <script>
+    const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     // ── Helpers ───────────────────────────────────────────────────────────
     function now() { return Date.now(); }
     function toNum(v, fallback = NaN) {
@@ -1174,7 +1175,7 @@
             streaming: { frameRate: 10 },
             zoom: {
               zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
-              pan: { enabled: true, mode: 'x', modifierKey: 'ctrl' },
+              pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
           scales: {
@@ -1234,7 +1235,7 @@
             streaming: { frameRate: 10 },
             zoom: {
               zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
-              pan: { enabled: true, mode: 'x', modifierKey: 'ctrl' },
+              pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
           scales: {
@@ -1268,7 +1269,7 @@
             streaming: { frameRate: 8 },
             zoom: {
               zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
-              pan: { enabled: true, mode: 'x', modifierKey: 'ctrl' },
+              pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
           scales: {
