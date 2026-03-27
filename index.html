@@ -915,6 +915,9 @@
               <div class="threshold-row"><label>VOUT (V)</label> <input id="th-vout-min" placeholder="11.4"> — <input id="th-vout-max" placeholder="12.6"></div>
               <div class="threshold-row"><label>IOUT (A)</label> <input id="th-iout-min" placeholder="0"> — <input id="th-iout-max" placeholder="10"></div>
               <div class="threshold-row"><label>TEMP (°C)</label> <input id="th-temp-min" placeholder="0"> — <input id="th-temp-max" placeholder="60"></div>
+              <hr style="border:0;border-top:1px solid var(--border);margin:8px 0;">
+              <div class="threshold-row"><label style="color:var(--accent);">TG Bot</label> <input id="th-tg-bot" style="width:145px;" placeholder="1234:ABCdef..."></div>
+              <div class="threshold-row"><label style="color:var(--accent);">Chat ID</label> <input id="th-tg-chat" style="width:145px;" placeholder="-100123456"></div>
               <button class="btn" style="margin-top:6px;font-size:11px;padding:3px 10px;" onclick="saveThresholds()">Save</button>
             </div>
           </div>
@@ -1757,6 +1760,7 @@
       vout: { min: 11.4, max: 12.6 },
       iout: { min: 0,    max: 10 },
       temp: { min: 0,    max: 60 },
+      tg:   { bot: '',   chat: '' }
     };
 
     let alarmThresholds = { ...DEFAULT_THRESHOLDS };
@@ -1774,6 +1778,13 @@
       } catch { /* ignore */ }
       // Populate inputs
       Object.keys(alarmThresholds).forEach(k => {
+        if (k === 'tg') {
+          const elBot = document.getElementById('th-tg-bot');
+          const elChat = document.getElementById('th-tg-chat');
+          if (elBot) elBot.value = alarmThresholds.tg.bot || '';
+          if (elChat) elChat.value = alarmThresholds.tg.chat || '';
+          return;
+        }
         const minEl = document.getElementById(`th-${k}-min`);
         const maxEl = document.getElementById(`th-${k}-max`);
         if (minEl) minEl.value = alarmThresholds[k].min;
@@ -1784,6 +1795,13 @@
 
     function saveThresholds() {
       Object.keys(DEFAULT_THRESHOLDS).forEach(k => {
+        if (k === 'tg') {
+          const elBot = document.getElementById('th-tg-bot');
+          const elChat = document.getElementById('th-tg-chat');
+          if (elBot) alarmThresholds.tg.bot = elBot.value.trim();
+          if (elChat) alarmThresholds.tg.chat = elChat.value.trim();
+          return;
+        }
         const minVal = parseFloat(document.getElementById(`th-${k}-min`).value);
         const maxVal = parseFloat(document.getElementById(`th-${k}-max`).value);
         if (!isNaN(minVal)) alarmThresholds[k].min = minVal;
@@ -1802,8 +1820,31 @@
       if (!th) return;
       const scEl = document.getElementById('sc-' + param);
       if (!scEl) return;
+      
       const outOfRange = value < th.min || value > th.max;
+      const wasOutOfRange = scEl.classList.contains('alarm-active');
+      
       scEl.classList.toggle('alarm-active', outOfRange);
+
+      // Trigger Telegram notification on edge (entering alarm state)
+      if (outOfRange && !wasOutOfRange) {
+        sendTelegramAlert(param, value, th);
+      }
+    }
+
+    function sendTelegramAlert(param, value, th) {
+      const bot = alarmThresholds.tg?.bot;
+      const chat = alarmThresholds.tg?.chat;
+      if (!bot || !chat) return;
+      
+      const text = `🚨 *PMBus Alarm*\nDevice: \`${activeAddr}\`\nParam: *${param.toUpperCase()}*\nValue: ${value.toFixed(2)} (Limit: ${th.min}-${th.max})`;
+      const url = `https://api.telegram.org/bot${bot}/sendMessage`;
+      
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chat, text: text, parse_mode: 'MarkdownV2' })
+      }).catch(e => console.error("Telegram API error:", e));
     }
 
     // ── CDN library load check ────────────────────────────────────────────
