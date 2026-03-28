@@ -1477,7 +1477,7 @@
             legend: { labels: { color: '#8b949e', font: { size: 10 }, boxWidth: 10, padding: 8 } },
             streaming: { frameRate: 10 },
             zoom: {
-              zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
+              zoom: { wheel: { enabled: !IS_TOUCH }, pinch: { enabled: !IS_TOUCH }, mode: 'x' },
               pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
@@ -1537,7 +1537,7 @@
             legend: { labels: { color: '#8b949e', font: { size: 10 }, boxWidth: 10, padding: 6 } },
             streaming: { frameRate: 10 },
             zoom: {
-              zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
+              zoom: { wheel: { enabled: !IS_TOUCH }, pinch: { enabled: !IS_TOUCH }, mode: 'x' },
               pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
@@ -1571,7 +1571,7 @@
             legend: { labels: { color: '#8b949e', font: { size: 9 }, boxWidth: 8, padding: 4 } },
             streaming: { frameRate: 8 },
             zoom: {
-              zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
+              zoom: { wheel: { enabled: !IS_TOUCH }, pinch: { enabled: !IS_TOUCH }, mode: 'x' },
               pan: { enabled: !IS_TOUCH, mode: 'x', modifierKey: 'ctrl' },
             },
           },
