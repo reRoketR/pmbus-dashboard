@@ -409,6 +409,7 @@
     canvas {
       width: 100% !important;
       height: 100% !important;
+      touch-action: pan-y pinch-zoom !important;
     }
 
     /* Telemetry card — 2×2 sub-grid */
@@ -655,115 +656,400 @@
     }
 
     /* ── Command Panel ──────────────────────────────────────── */
-    .cmd-card { grid-column: 3; grid-row: 3 / 5; }
-    .cmd-body { display: flex; flex-direction: column; gap: 8px; padding: 10px; }
-    .cmd-form { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-end; }
-    .cmd-form .field { display: flex; flex-direction: column; gap: 2px; }
-    .cmd-form .field label { color: var(--muted); font-size: 10px; }
+    .cmd-card {
+      grid-column: 3;
+      grid-row: 3 / 5;
+    }
+
+    .cmd-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .cmd-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .cmd-form .field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cmd-form .field label {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
     .cmd-form .field input,
     .cmd-form .field select {
-      background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
-      color: var(--text); padding: 4px 6px; font-size: 11px; font-family: var(--font);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 4px 6px;
+      font-size: 11px;
+      font-family: var(--font);
     }
-    .cmd-form .field select { min-width: 160px; }
-    .cmd-form .field input { width: 70px; }
+
+    .cmd-form .field select {
+      min-width: 160px;
+    }
+
+    .cmd-form .field input {
+      width: 70px;
+    }
+
     .cmd-send {
-      background: var(--accent); color: #fff; border: none; border-radius: 4px;
-      padding: 5px 14px; font-size: 11px; font-weight: 600; cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
       align-self: flex-end;
     }
-    .cmd-send:hover { filter: brightness(1.15); }
-    .cmd-send:disabled { opacity: .5; cursor: default; }
+
+    .cmd-send:hover {
+      filter: brightness(1.15);
+    }
+
+    .cmd-send:disabled {
+      opacity: .5;
+      cursor: default;
+    }
+
     .cmd-log {
-      flex: 1; overflow-y: auto; max-height: 200px; min-height: 60px;
-      background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
-      padding: 6px; font-size: 10px; font-family: 'Consolas', 'Courier New', monospace;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 200px;
+      min-height: 60px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
       color: var(--muted);
     }
-    .cmd-log-entry { padding: 3px 0; border-bottom: 1px solid #21262d; }
-    .cmd-log-entry:last-child { border-bottom: none; }
-    .cmd-log-entry .cmd-dir { font-weight: 700; }
-    .cmd-log-entry .cmd-dir.sent { color: var(--accent); }
-    .cmd-log-entry .cmd-dir.recv { color: var(--green); }
-    .cmd-log-entry .cmd-dir.timeout { color: var(--orange); }
-    .cmd-log-entry .cmd-ts { color: #484f58; margin-left: 6px; }
+
+    .cmd-log-entry {
+      padding: 3px 0;
+      border-bottom: 1px solid #21262d;
+    }
+
+    .cmd-log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .cmd-log-entry .cmd-dir {
+      font-weight: 700;
+    }
+
+    .cmd-log-entry .cmd-dir.sent {
+      color: var(--accent);
+    }
+
+    .cmd-log-entry .cmd-dir.recv {
+      color: var(--green);
+    }
+
+    .cmd-log-entry .cmd-dir.timeout {
+      color: var(--orange);
+    }
+
+    .cmd-log-entry .cmd-ts {
+      color: #484f58;
+      margin-left: 6px;
+    }
 
     /* ── Alarm Thresholds ───────────────────────────────────── */
     @keyframes alarm-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(248,81,73,0); }
-      50% { box-shadow: 0 0 8px 2px rgba(248,81,73,0.5); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(248, 81, 73, 0);
+      }
+
+      50% {
+        box-shadow: 0 0 8px 2px rgba(248, 81, 73, 0.5);
+      }
     }
+
     .sub-chart.alarm-active {
       border: 1px solid var(--red);
       animation: alarm-pulse 1.2s ease-in-out infinite;
       border-radius: var(--radius);
     }
+
     .alarm-icon {
-      display: none; color: var(--red); font-size: 14px;
-      margin-left: 4px; vertical-align: middle;
+      display: none;
+      color: var(--red);
+      font-size: 14px;
+      margin-left: 4px;
+      vertical-align: middle;
     }
-    .sub-chart.alarm-active .alarm-icon { display: inline; }
+
+    .sub-chart.alarm-active .alarm-icon {
+      display: inline;
+    }
+
     .threshold-cfg {
-      display: none; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 10px; position: absolute;
-      right: 8px; top: 32px; z-index: 100; min-width: 240px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      position: absolute;
+      right: 8px;
+      top: 32px;
+      z-index: 100;
+      min-width: 240px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
-    .threshold-cfg.open { display: block; }
-    .threshold-cfg h4 { color: var(--text); font-size: 11px; margin-bottom: 8px; }
+
+    .threshold-cfg.open {
+      display: block;
+    }
+
+    .threshold-cfg h4 {
+      color: var(--text);
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
     .threshold-row {
-      display: flex; align-items: center; gap: 6px;
-      margin-bottom: 6px; font-size: 11px; color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      color: var(--muted);
     }
-    .threshold-row label { min-width: 50px; }
+
+    .threshold-row label {
+      min-width: 50px;
+    }
+
     .threshold-row input {
-      background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
-      color: var(--text); padding: 3px 5px; font-size: 11px; width: 60px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 3px 5px;
+      font-size: 11px;
+      width: 60px;
       font-family: var(--font);
     }
 
     /* ── Export Button ──────────────────────────────────────── */
     .export-btn {
-      background: none; border: 1px solid var(--border); border-radius: 4px;
-      color: var(--muted); cursor: pointer; font-size: 11px;
-      padding: 2px 6px; line-height: 1;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 11px;
+      padding: 2px 6px;
+      line-height: 1;
     }
-    .export-btn:hover { color: var(--text); border-color: var(--muted); }
+
+    .export-btn:hover {
+      color: var(--text);
+      border-color: var(--muted);
+    }
 
     /* ── Mobile & Tablet Responsiveness ────────────────────────── */
     @media (max-width: 850px) {
-      html, body { overflow-x: hidden; width: 100%; position: relative; min-width: 0 !important; }
-      .app { display: block; height: auto; min-width: 0 !important; }
-      header { flex-direction: column; align-items: center; text-align: center; gap: 8px; height: auto; padding: 12px 10px; width: 100%; min-width: 0 !important; }
-      .title { margin-bottom: 5px; font-size: 1.2rem; }
-      .conn-row { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; width: 100%; max-width: 400px; }
-      .conn-row label { text-align: left; font-size: 11px; opacity: 0.7; grid-column: 1; }
-      .conn-row input { width: 100% !important; margin: 0 !important; font-size: 14px; padding: 6px; grid-column: 2; height: 32px; }
-      .conn-row .tls-toggle { grid-column: 1 / -1; justify-content: center; margin: 5px 0; }
-      .conn-row .btn, .conn-row .badge { grid-column: 1 / -1; width: 100%; margin: 2px 0; height: 36px; }
-      .conn-row .badge { justify-content: center; }
 
-      .main { display: flex; flex-direction: column; height: auto !important; overflow: visible !important; padding: 10px; gap: 15px; }
-      .card { margin-bottom: 0; }
-      .card.telem, .card.events, .cmd-card { grid-column: 1 / -1 !important; grid-row: auto !important; }
-      
-      .stats-bar { display: grid; grid-template-columns: 1fr 1fr; height: auto; padding: 12px; gap: 12px 0; justify-items: center; }
-      .stat { border-right: none; padding: 0; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
-      .stat-label { font-size: 10px; margin-bottom: 2px; }
-      .stat-value { font-size: 1.1rem; }
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+        min-width: 0 !important;
+      }
 
-      .card.telem .card-body { grid-template-columns: 1fr; gap: 15px; }
-      .sub-chart { height: 180px; }
-      
-      .dev-tabs { overflow-x: auto; padding: 2px 0 8px 0; white-space: nowrap; justify-content: flex-start; scrollbar-width: none; }
-      .dev-tabs::-webkit-scrollbar { display: none; }
-      .dev-tab { flex: 0 0 auto; margin-right: 8px; }
-      
-      .threshold-cfg { width: 94vw; max-width: 340px; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; top: 35px; min-width: 0 !important; }
-      .threshold-row { flex-wrap: wrap; gap: 4px; width: 100%; }
-      .threshold-row label { min-width: 60px; flex-shrink: 0; }
-      .threshold-row input { flex: 1; min-width: 50px; width: auto !important; }
-      #btn-tg-link { width: 100%; margin: 6px 0 2px 0; height: 34px; font-size: 13px; font-weight: 600; }
+      .app {
+        display: block;
+        height: auto;
+        min-width: 0 !important;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        height: auto;
+        padding: 12px 10px;
+        width: 100%;
+        min-width: 0 !important;
+      }
+
+      .title {
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+      }
+
+      .conn-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px 12px;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .conn-row label {
+        text-align: left;
+        font-size: 11px;
+        opacity: 0.7;
+        grid-column: 1;
+      }
+
+      .conn-row input {
+        width: 100% !important;
+        margin: 0 !important;
+        font-size: 14px;
+        padding: 6px;
+        grid-column: 2;
+        height: 32px;
+      }
+
+      .conn-row .tls-toggle {
+        grid-column: 1 / -1;
+        justify-content: center;
+        margin: 5px 0;
+      }
+
+      .conn-row .btn,
+      .conn-row .badge {
+        grid-column: 1 / -1;
+        width: 100%;
+        margin: 2px 0;
+        height: 36px;
+      }
+
+      .conn-row .badge {
+        justify-content: center;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 10px;
+        gap: 15px;
+      }
+
+      .card {
+        margin-bottom: 0;
+      }
+
+      .card.telem,
+      .card.events,
+      .cmd-card {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+      }
+
+      .stats-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+        padding: 12px;
+        gap: 12px 0;
+        justify-items: center;
+      }
+
+      .stat {
+        border-right: none;
+        padding: 0;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-label {
+        font-size: 10px;
+        margin-bottom: 2px;
+      }
+
+      .stat-value {
+        font-size: 1.1rem;
+      }
+
+      .card.telem .card-body {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .sub-chart {
+        height: 180px;
+      }
+
+      .dev-tabs {
+        overflow-x: auto;
+        padding: 2px 0 8px 0;
+        white-space: nowrap;
+        justify-content: flex-start;
+        scrollbar-width: none;
+      }
+
+      .dev-tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .dev-tab {
+        flex: 0 0 auto;
+        margin-right: 8px;
+      }
+
+      .threshold-cfg {
+        width: 94vw;
+        max-width: 340px;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        top: 35px;
+        min-width: 0 !important;
+      }
+
+      .threshold-row {
+        flex-wrap: wrap;
+        gap: 4px;
+        width: 100%;
+      }
+
+      .threshold-row label {
+        min-width: 60px;
+        flex-shrink: 0;
+      }
+
+      .threshold-row input {
+        flex: 1;
+        min-width: 50px;
+        width: auto !important;
+      }
+
+      #btn-tg-link {
+        width: 100%;
+        margin: 6px 0 2px 0;
+        height: 34px;
+        font-size: 13px;
+        font-weight: 600;
+      }
     }
   </style>
 </head>
@@ -842,7 +1128,8 @@
         <div class="card-header">Throughput
           <span class="card-tag">metrics</span>
           <div class="card-actions">
-            <button class="export-btn" title="Export CSV" onclick="exportCSV(cThroughput,'throughput')">&#x2B73; CSV</button>
+            <button class="export-btn" title="Export CSV" onclick="exportCSV(cThroughput,'throughput')">&#x2B73;
+              CSV</button>
             <button class="icon-btn" title="Reset zoom" onclick="resetZoom(cThroughput)">&#x2B1C;</button>
             <button class="icon-btn" title="Expand" onclick="toggleFullscreen(this.closest('.card'))">&#x26F6;</button>
           </div>
@@ -939,7 +1226,8 @@
           </div>
           <span class="card-tag">telemetry</span>
           <div class="card-actions" style="position:relative;">
-            <button class="export-btn" title="Export all telemetry CSV" onclick="exportTelemetryCSV()">&#x2B73; CSV</button>
+            <button class="export-btn" title="Export all telemetry CSV" onclick="exportTelemetryCSV()">&#x2B73;
+              CSV</button>
             <button class="icon-btn" title="Alarm thresholds" onclick="toggleThresholdCfg()">&#x2699;</button>
             <button class="icon-btn" title="Reset zoom (all)"
               onclick="[cVin,cVout,cIout,cTemp].forEach(c=>resetZoom(c))">&#x2B1C;</button>
@@ -947,16 +1235,27 @@
             <!-- Threshold config popover -->
             <div class="threshold-cfg" id="threshold-cfg">
               <h4>Alarm Thresholds</h4>
-              <div class="threshold-row"><label>VIN (V)</label> <input id="th-vin-min" placeholder="44"> — <input id="th-vin-max" placeholder="52"></div>
-              <div class="threshold-row"><label>VOUT (V)</label> <input id="th-vout-min" placeholder="11.4"> — <input id="th-vout-max" placeholder="12.6"></div>
-              <div class="threshold-row"><label>IOUT (A)</label> <input id="th-iout-min" placeholder="0"> — <input id="th-iout-max" placeholder="10"></div>
-              <div class="threshold-row"><label>TEMP (°C)</label> <input id="th-temp-min" placeholder="0"> — <input id="th-temp-max" placeholder="60"></div>
+              <div class="threshold-row"><label>VIN (V)</label> <input id="th-vin-min" placeholder="44"> — <input
+                  id="th-vin-max" placeholder="52"></div>
+              <div class="threshold-row"><label>VOUT (V)</label> <input id="th-vout-min" placeholder="11.4"> — <input
+                  id="th-vout-max" placeholder="12.6"></div>
+              <div class="threshold-row"><label>IOUT (A)</label> <input id="th-iout-min" placeholder="0"> — <input
+                  id="th-iout-max" placeholder="10"></div>
+              <div class="threshold-row"><label>TEMP (°C)</label> <input id="th-temp-min" placeholder="0"> — <input
+                  id="th-temp-max" placeholder="60"></div>
               <hr style="border:0;border-top:1px solid var(--border);margin:8px 0;">
-              <div class="threshold-row"><label style="color:var(--accent);" title="TG Bot Token">TG Token</label> <input id="th-tg-bot" style="width:145px;" placeholder="1234:ABCdef..."></div>
-              <div class="threshold-row"><label style="color:var(--accent);">Chat ID</label> <input id="th-tg-chat" style="width:80px;" placeholder="Auto" readonly>
-              <button class="btn" id="btn-tg-link" style="font-size:10px;padding:2px 6px;margin-left:auto;background:var(--accent);color:#fff;border:none;" onclick="linkTelegram()">Link</button></div>
-              <div id="tg-pin-hint" style="display:none;font-size:10px;color:var(--orange);margin-bottom:6px;line-height:1.2;"></div>
-              <button class="btn" style="margin-top:6px;font-size:11px;padding:3px 10px;" onclick="saveThresholds()">Save Config</button>
+              <div class="threshold-row"><label style="color:var(--accent);" title="TG Bot Token">TG Token</label>
+                <input id="th-tg-bot" style="width:145px;" placeholder="1234:ABCdef..."></div>
+              <div class="threshold-row"><label style="color:var(--accent);">Chat ID</label> <input id="th-tg-chat"
+                  style="width:80px;" placeholder="Auto" readonly>
+                <button class="btn" id="btn-tg-link"
+                  style="font-size:10px;padding:2px 6px;margin-left:auto;background:var(--accent);color:#fff;border:none;"
+                  onclick="linkTelegram()">Link</button>
+              </div>
+              <div id="tg-pin-hint"
+                style="display:none;font-size:10px;color:var(--orange);margin-bottom:6px;line-height:1.2;"></div>
+              <button class="btn" style="margin-top:6px;font-size:11px;padding:3px 10px;"
+                onclick="saveThresholds()">Save Config</button>
             </div>
           </div>
         </div>
@@ -969,10 +1268,14 @@
           <span class="status-badge" id="sb-temp">TEMP —</span>
         </div>
         <div class="card-body">
-          <div class="sub-chart" id="sc-vin"><canvas id="c-vin"></canvas><span class="alarm-icon" id="ai-vin">⚠</span></div>
-          <div class="sub-chart" id="sc-vout"><canvas id="c-vout"></canvas><span class="alarm-icon" id="ai-vout">⚠</span></div>
-          <div class="sub-chart" id="sc-iout"><canvas id="c-iout"></canvas><span class="alarm-icon" id="ai-iout">⚠</span></div>
-          <div class="sub-chart" id="sc-temp"><canvas id="c-temp"></canvas><span class="alarm-icon" id="ai-temp">⚠</span></div>
+          <div class="sub-chart" id="sc-vin"><canvas id="c-vin"></canvas><span class="alarm-icon" id="ai-vin">⚠</span>
+          </div>
+          <div class="sub-chart" id="sc-vout"><canvas id="c-vout"></canvas><span class="alarm-icon"
+              id="ai-vout">⚠</span></div>
+          <div class="sub-chart" id="sc-iout"><canvas id="c-iout"></canvas><span class="alarm-icon"
+              id="ai-iout">⚠</span></div>
+          <div class="sub-chart" id="sc-temp"><canvas id="c-temp"></canvas><span class="alarm-icon"
+              id="ai-temp">⚠</span></div>
         </div>
       </div>
 
@@ -1391,7 +1694,7 @@
 
       // Push to live charts only for the active device
       if (addr === activeAddr) {
-        if (!isNaN(vin))  { push(cVin, 0, vin, ts);  checkAlarm('vin', vin); }
+        if (!isNaN(vin)) { push(cVin, 0, vin, ts); checkAlarm('vin', vin); }
         if (!isNaN(vout)) { push(cVout, 0, vout, ts); checkAlarm('vout', vout); }
         if (!isNaN(iout)) { push(cIout, 0, iout, ts); checkAlarm('iout', iout); }
         if (!isNaN(temp)) { push(cTemp, 0, temp, ts); checkAlarm('temp', temp); }
@@ -1510,7 +1813,7 @@
             `pmbus/${_connectGw}/metrics`,
             `pmbus/${_connectGw}/events`,
           ];
-      subs.forEach(t => client.subscribe(t, { qos: 0 }));
+          subs.forEach(t => client.subscribe(t, { qos: 0 }));
           // Also subscribe to command responses
           const cmdRespTopic = `pmbus/${_connectGw}/cmd/response`;
           client.subscribe(cmdRespTopic, { qos: 0 });
@@ -1667,7 +1970,7 @@
       const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `pmbus_${filename}_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
+      a.download = `pmbus_${filename}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
       a.click();
       URL.revokeObjectURL(a.href);
     }
@@ -1696,7 +1999,7 @@
 
       const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
-      a.download = `pmbus_telemetry_${activeAddr}_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
+      a.download = `pmbus_telemetry_${activeAddr}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
       a.href = URL.createObjectURL(blob);
       a.click();
       URL.revokeObjectURL(a.href);
@@ -1795,11 +2098,11 @@
     // FEATURE 3: Alarm Thresholds
     // ══════════════════════════════════════════════════════════════════════
     const DEFAULT_THRESHOLDS = {
-      vin:  { min: 44,   max: 52 },
+      vin: { min: 44, max: 52 },
       vout: { min: 11.4, max: 12.6 },
-      iout: { min: 0,    max: 10 },
-      temp: { min: 0,    max: 60 },
-      tg:   { bot: '',   chat: '' }
+      iout: { min: 0, max: 10 },
+      temp: { min: 0, max: 60 },
+      tg: { bot: '', chat: '' }
     };
 
     let alarmThresholds = { ...DEFAULT_THRESHOLDS };
@@ -1899,10 +2202,10 @@
       if (!th) return;
       const scEl = document.getElementById('sc-' + param);
       if (!scEl) return;
-      
+
       const outOfRange = value < th.min || value > th.max;
       const wasOutOfRange = scEl.classList.contains('alarm-active');
-      
+
       scEl.classList.toggle('alarm-active', outOfRange);
 
       // Trigger Telegram notification on edge (entering alarm state)
@@ -1915,10 +2218,10 @@
       const bot = alarmThresholds.tg?.bot;
       const chat = alarmThresholds.tg?.chat;
       if (!bot || !chat) return;
-      
+
       const text = `🚨 *PMBus Alarm*\nDevice: \`${activeAddr}\`\nParam: *${param.toUpperCase()}*\nValue: ${value.toFixed(2)} (Limit: ${th.min}-${th.max})`;
       const url = `https://api.telegram.org/bot${bot}/sendMessage`;
-      
+
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
